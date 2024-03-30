@@ -1,6 +1,7 @@
 "use strict"
 
 const Department = require("../models/department.model")
+const Personnel = require("../models/personnel.model");
 
 module.exports = {
     list: async (req, res) => {
@@ -35,7 +36,7 @@ module.exports = {
       const data = await Department.updateOne({ _id: req.params.id }, req.body, {
         runValidators: true,
       });
-  
+
       res.status(202).send({
         error: false,
         data,
@@ -54,7 +55,6 @@ module.exports = {
     },
   
     personnels: async (req, res) => {
-      const Personnel = require("../models/personnel.model");
   
       const data = await res.getModelList(
         Personnel,
