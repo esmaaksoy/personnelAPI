@@ -39,7 +39,7 @@ module.exports = {
       res.status(202).send({
         error: false,
         data,
-        new: await Department.findOne({ _id: req.params.id }),
+        newData: await Department.findOne({ _id: req.params.id }),
       });
     },
   
@@ -48,7 +48,7 @@ module.exports = {
   
       res.status(data.deletedCount ? 204 : 404).send({
         error: !data.deletedCount,
-        data,
+        data: data,
       });
   
     },
