@@ -43,6 +43,13 @@ module.exports = {
 
   update: async (req, res) => {
 
+    //! Admin olmayan kişiler maaş bilgilerini vs göremezsin ki güncelleme işlemi yapamasın
+    if (!req.user.isAdmin) {
+      req.body.isAdmin = false;
+      delete req.body.isLead;
+      delete req.body.salary;
+    }
+
     //! runValidators neden kullanıyorum? Diyelim ki ben model de bir email tanımladım ve bu emaile belli validasyonlar ekledim, gerçek bir email mi değil mi onu anlamak için. Bu validasyon işlemi create yaparken çalışır, post isteği atıyorum, email giriyorum, burada otomatik kontrol eder ama ben put işlemi yapıp bu email güncellemek istiyorum. İşte burada bu validasyon çalışmaz. Ama benim emailimin değişiklik yaparken de bu validasyona uyması gerekir. İşte update işlemlerinde de yazdığım validasyonlar kontrol edilsin istiyorsam o zaman runValidators:true diyorum.
 
     const isLead = req.body?.isLead || false;
@@ -70,7 +77,7 @@ module.exports = {
 
   delete: async (req, res) => {
     const data = await Personnel.deleteOne({ _id: req.params.id });
-    
+
     //! const isDeleted = data.deletedCount >=1 ? true : false;
     //! res.status(isDeleted ? 204 : 404 ).send({
     //!       error: !isDeleted,
@@ -84,5 +91,4 @@ module.exports = {
       data,
     });
   },
-
 };
