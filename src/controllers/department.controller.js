@@ -9,7 +9,7 @@ module.exports = {
       res.status(200).send({
         error: false,
         detail: await res.getModelListDetails(Department),
-        data, 
+        data: data, 
       });
     },
   
