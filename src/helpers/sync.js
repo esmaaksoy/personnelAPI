@@ -2,7 +2,7 @@
 
 module.exports = async function() {
 
-    return null;
+    // return null;  //!Bunu açık bırakırsam dosyam çalışmaz, kapattım o yüzden
 
     const { mongoose } = require('../configs/dbConnection')
     await mongoose.connection.dropDatabase()
