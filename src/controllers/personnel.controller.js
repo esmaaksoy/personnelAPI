@@ -42,6 +42,9 @@ module.exports = {
   },
 
   update: async (req, res) => {
+
+    //! runValidators neden kullanıyorum? Diyelim ki ben model de bir email tanımladım ve bu emaile belli validasyonlar ekledim, gerçek bir email mi değil mi onu anlamak için. Bu validasyon işlemi create yaparken çalışır, post isteği atıyorum, email giriyorum, burada otomatik kontrol eder ama ben put işlemi yapıp bu email güncellemek istiyorum. İşte burada bu validasyon çalışmaz. Ama benim emailimin değişiklik yaparken de bu validasyona uyması gerekir. İşte update işlemlerinde de yazdığım validasyonlar kontrol edilsin istiyorsam o zaman runValidators:true diyorum.
+
     const isLead = req.body?.isLead || false;
     if (isLead) {
       const { departmentId } = await Personnel.findOne(
@@ -67,6 +70,14 @@ module.exports = {
 
   delete: async (req, res) => {
     const data = await Personnel.deleteOne({ _id: req.params.id });
+    
+    //! const isDeleted = data.deletedCount >=1 ? true : false;
+    //! res.status(isDeleted ? 204 : 404 ).send({
+    //!       error: !isDeleted,
+    //!       data,
+    //!     });
+
+    //! Yukarıda yaptığım işlemi aşağıda daha kısa bir şekilde yazdım. Benim datamın içinde deletedCount diye bir metod var, eğer data silindiyse buraya silinen data sayısı geliyor, silinmediyse 0 geliyor. Ben de diyorum ki bu gelen sayı 1den büyük ya da eşitse true döndür değilse false döndür. Ve status kodunu da bu şarta göre gönderiyorum. Eğer silinen birşey varsa 204 gönder yoksa 404 gönder. error kısmına da !isDeleted yazıyorum, yani datam silindiyse bu true gelecek ama işlemde bir hata yok yani silindi dolayısıyla error:false yazması gerekiyor. Dönen değerin tam tersi yani, o nedenle isDeleted tersini alıyorum. Ama bunu bu şekilde uzun uzun yazmaya gerek yok; deletedCount'un 1 ve 1den büyük olması true demektir, 0'a eşit olması false demektir. O nedenle aşağıda işlemleri o şekilde yeniden yazdık.
 
     res.status(data.deletedCount ? 204 : 404).send({
       error: !data.deletedCount,
