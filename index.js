@@ -17,6 +17,12 @@ app.use(require('cookie-session')({ secret: process.env.SECRET_KEY }))
 app.use(require("./src/middlewares/queryHandler"))
 app.use(require('./src/middlewares/errorHandler'))
 app.use(require('./src/middlewares/authentication'))
+app.use(require("./src/middlewares/logging"))
+
+const swaggerUi = require('swagger-ui-express')
+const swaggerJson = require('./swagger.json')
+app.use('/documents/swagger', swaggerUi.serve, swaggerUi.setup(swaggerJson, { swaggerOptions: { persistAuthorization: true } }))
+
 
 
 app.all('/', (req, res) => {
