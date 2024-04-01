@@ -72,23 +72,55 @@ Swagger gittikçe popülerleşiyor, redoc şuan populer zaten.
 openAPI bir documantion standartıdır. Dökümanlar bu standarta uyar.
 
 // https://swagger-autogen.github.io/docs/
-npm i swagger-autogen  //benim routelarımı tarayıp otomatik swaager oluşturacak, JSON dosyası oluşturacak
+npm i swagger-autogen //benim routelarımı tarayıp otomatik swaager oluşturacak, JSON dosyası oluşturacak
 npm i swagger-ui-express // Oluşan JSON dosyasını alıp otomatik görüntüleme yapacak
 
 npm i redoc-express // redoc için
 
-
 swaggerAutogen.js dosyasını çalıştırmak için terminale "node swaggerAutogen.js" yaz
-başarılı olursa console da aşağıdaki çıktıyı göreceksin 
-Swagger-autogen:  Success
+başarılı olursa console da aşağıdaki çıktıyı göreceksin
+Swagger-autogen: Success
 
 bundan sonra da dosylarında swagger.json isimli bir dosya olmalı
 
-şimdi oluşan json dosyasonı görüntülemek için index.js içine aşağıdaki kodu yazıyorum 
+şimdi oluşan json dosyasonı görüntülemek için index.js içine aşağıdaki kodu yazıyorum
 const swaggerUi = require('swagger-ui-express')
 bu swaggerUi da bir route aslında. Ben şimdi swaggerUi'ın nerede çalışmasını istiyorsam ona bir path yazacağım
 
-iki parametrem var swaggerUi.serve bu sistemi çalıştır, 
+iki parametrem var swaggerUi.serve bu sistemi çalıştır,
 swaggerUi.setup("",{}) ayarları yapacak, birinci parametre hangi dosya yani json dosyası nerede, ikinci parametre token çalıştırma ayarı
 
 app.use('/documents/swagger', swaggerUi.serve, swaggerUi.setup(swaggerJson, { swaggerOptions: { persistAuthorization: true } }))
+
+Bu kodları ileride kullanmak istediğimde üst kısma hiç dokunmayacağım sadece definiton en altındaki kımı değiştireceğim
+
+swagger-autogen yazıp google'la, dökümanı nasıl daha görsel yapacağına bak.
+
+swagger "all" metodunu desteklemez.
+Bir değişiklik yaparsan swagger dosyasını tekrar çalıştır.
+
+Görsellik için birşeyler yapacaksam bunları controllerlarda yapabilirim. #swagger yazarsam swagger bunu yakalayabiliyor, yorum içinde olmalı
+Token controller görünmemesi lazım, bu sadece backendi ilgilendirir. O yüzden Token kapatacağız şimdi.
+şekilde yapabiliriz. deprecated dersem üzerini çiziyor, başına da \_ koyarsam görünmez. Eğer hiç yer almasın dökümanda diyorsam ignore kullanacağım.
+/_
+\_swagger.deprecated = true
+#swagger.ignore = true
+_/
+
+Yaptığım görselleştirme işleminin hepsi redocta da görünecek.
+Swaggerda bazı pathlerde çıktı göremeyebilirsin, bunun nedeni Token bilgisi istemesidir. Bunun için Token alıp üsttedeki Auth.. kısmına yapıştır.
+
+#### Redoc
+
+Önemli olan ayar aşağıdaki. Redoc datayı nereden alacak? yazdığımız json datasından
+specUrl: '/documents/json'
+
+Ana Urlde aşağıdaki kodu yazarsam açılış ekranında dökümanları gösterecek
+api: {
+documents: {
+swagger: 'http://127.0.0.1:8000/documents/swagger',
+redoc: 'http://127.0.0.1:8000/documents/redoc',
+json: 'http://127.0.0.1:8000/documents/json',
+},
+contact: 'contact@clarusway.com'
+},
