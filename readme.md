@@ -59,8 +59,6 @@ Personnel Api/
 - **Swagger/Redoc:** Documentation is generated using Swagger or Redoc to provide API documentation in an interactive and user-friendly manner.
 - **JSON File Creation:** JSON files are created to store data or configurations for various purposes.
 - **Token-based Authentication:** Token-based authentication mechanism is implemented to ensure secure communication between client and server, enhancing overall application security and user authentication.
-- **Cookie-session:** Middleware for session management in Express applications.
-- **Cors:** Middleware for Cross-Origin Resource Sharing (CORS) in Express.
 - **Dotenv:** Node.js module used for loading environment variables.
 - **Express-async-errors:** Helper module for asynchronous error handling in Express applications.
 - **CRUD Operations** Users can create, read, update, and delete books from the database.
