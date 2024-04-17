@@ -4,8 +4,20 @@ const Personnel = require("../models/personnel.model");
 
 module.exports = {
   list: async (req, res) => {
-    const data = await res.getModelList(Personnel, {}, "departmentId");
+    /*
+        #swagger.tags = ["Personnels"]
+        #swagger.summary = "List Personnels"
+        #swagger.description = `
+            You can send query with endpoint for search[], sort[], page and limit.
+            <ul> Examples:
+                <li>URL/?<b>search[field1]=value1&search[field2]=value2</b></li>
+                <li>URL/?<b>sort[field1]=1&sort[field2]=-1</b></li>
+                <li>URL/?<b>page=2&limit=1</b></li>
+            </ul>
+        `
+    */
 
+    const data = await res.getModelList(Personnel, {}, "departmentId");
     res.status(200).send({
       error: false,
       detail: await res.getModelListDetails(Personnel),
@@ -14,6 +26,32 @@ module.exports = {
   },
 
   create: async (req, res) => {
+    /*
+        #swagger.tags = ["Personnels"]
+        #swagger.summary = "Personnels"
+        #swagger.parameters['body'] = {
+            in: 'body',
+            required: true,
+            schema: {
+                "departmentId":"6607dc9ffd4b6f7b026c3efb",
+                "username":"test",
+                "password":"1234l@ldKD",
+                "firstName":"test",
+                "lastName":"test",
+                "phone":"0566587621",
+                "email": "test@test.com",
+                "title":"Frontend Developer",
+                "salary": 50000,
+                "description":"Test Personnel",
+                "isActive": true,
+                "isAdmin": false,
+                "isLead": true,
+                "startedAt": "2023-10-15 13:14:15"
+              
+            }
+        }
+    */
+
     //! Bir departmana 10 kişi ekledim ve bunların hepsinde isLead true görünüyor. Ama bir departmanda sadece bir tane Lead olabilir. Bu nedenle eski kayıtlarda yer alan isLead'leri false yapmak istiyorum ve en son eklediğim kişinin isLead özelliğini true yapmak istiyorum. Önce req.body'den isLead fieldını seçtim. UpdateMany ile hepsini güncelleyeceğim, ilgili department'ı "departmentId" ile buluyorum, çünkü sadece o department'daki isLead değerlerini değiştireceğim. ve diyorum ki isLead: true olanları false yap. Bunları create işleminde yaptım.
     //! Şimdi de update işlemi ile herhangi bir kişinin isLead özelliğinde bir değişiklik yapılarak isLead True olursa, diğer kişilerin isLead özelliğini false yapıyorum.
     const isLead = req.body?.isLead || false;
@@ -33,6 +71,11 @@ module.exports = {
   },
 
   read: async (req, res) => {
+    /*
+        #swagger.tags = ["Personnels"]
+        #swagger.summary = "Get SinglePersonnel"
+    */
+
     const data = await Personnel.findOne({ _id: req.params.id });
 
     res.status(200).send({
@@ -42,7 +85,30 @@ module.exports = {
   },
 
   update: async (req, res) => {
-
+       /*
+        #swagger.tags = ["Personnels"]
+        #swagger.summary = "Update Personnel"
+        #swagger.parameters['body'] = {
+            in: 'body',
+            required: true,
+            schema: {
+                "departmentId":"6607dc9ffd4b6f7b026c3efb",
+                "username":"test",
+                "password":"1234l@ldKD",
+                "firstName":"test",
+                "lastName":"test",
+                "phone":"0566587621",
+                "email": "test@test.com",
+                "title":"Frontend Developer",
+                "salary": 50000,
+                "description":"Test Personnel",
+                "isActive": true,
+                "isAdmin": false,
+                "isLead": true,
+                "startedAt": "2023-10-15 13:14:15"
+            }
+        }
+    */
     //! Admin olmayan kişiler maaş bilgilerini vs göremezsin ki güncelleme işlemi yapamasın
     if (!req.user.isAdmin) {
       req.body.isAdmin = false;
@@ -76,6 +142,11 @@ module.exports = {
   },
 
   delete: async (req, res) => {
+    /*
+        #swagger.tags = ["Personnels"]
+        #swagger.summary = "Delete Personnel"
+    */
+
     const data = await Personnel.deleteOne({ _id: req.params.id });
 
     //! const isDeleted = data.deletedCount >=1 ? true : false;
